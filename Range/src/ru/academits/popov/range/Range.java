@@ -10,15 +10,15 @@ public class Range {
     }
 
     public double getFrom() {
-        return this.from;
+        return from;
     }
-
-    public double getTo() {
-        return this.to;
-    }
-
+    
     public void setFrom(double from) {
         this.from = from;
+    }
+    
+    public double getTo() {
+        return to;
     }
 
     public void setTo(double to) {
@@ -26,10 +26,39 @@ public class Range {
     }
 
     public double getLength() {
-        return Math.abs(this.to - this.from);
+        return to - from;
     }
 
-    public boolean isInside(double numeric){
-        return numeric >= this.from && numeric <= this.to;
+    public boolean isInside(double number){
+        return number >= from && number <= to;
+    }
+
+    public Range getIntersection(Range range1, Range Range){
+        if (range1.getTo() <= Range.getFrom() || Range.getTo() <= range1.getFrom()){
+            return null;
+        }
+
+        double minTo = Math.min(range1.getTo(), Range.getTo());
+        double maxFrom = Math.max(range1.getFrom(), Range.getFrom());
+
+        return new Range(maxFrom, minTo);
+    }
+
+    public Range[] getMerger(Range range1, Range Range){
+        Range[] ranges;
+        if (range1.getTo() <= Range.getFrom() || Range.getTo() <= range1.getFrom()){
+            ranges = new Range[2];
+            ranges[0] = range1;
+            ranges[1] = Range;
+            return ranges;
+        }
+
+        double maxTo = Math.max(range1.getTo(), Range.getTo());
+        double minFrom = Math.min(range1.getFrom(), Range.getFrom());
+
+        ranges = new Range[1];
+        ranges[0] = new Range(minFrom, maxTo);
+
+        return ranges;
     }
 }

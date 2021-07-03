@@ -1,4 +1,6 @@
-package ru.academits.popov.range;
+package ru.academits.popov.main;
+
+import ru.academits.popov.range.Range;
 
 public class Main {
     public static void main(String[] args) {

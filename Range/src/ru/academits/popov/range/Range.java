@@ -12,11 +12,11 @@ public class Range {
     public double getFrom() {
         return from;
     }
-    
+
     public void setFrom(double from) {
         this.from = from;
     }
-    
+
     public double getTo() {
         return to;
     }
@@ -25,39 +25,69 @@ public class Range {
         this.to = to;
     }
 
+    public void print() {
+        System.out.printf("[%f;%f]\n", from, to);
+    }
+
     public double getLength() {
         return to - from;
     }
 
-    public boolean isInside(double number){
+    public boolean isInside(double number) {
         return number >= from && number <= to;
     }
 
-    public Range getIntersection(Range range1, Range Range){
-        if (range1.getTo() <= Range.getFrom() || Range.getTo() <= range1.getFrom()){
+    public Range getIntersection(Range range) {
+        if (to <= range.getFrom() || range.getTo() <= from) {
             return null;
         }
 
-        double minTo = Math.min(range1.getTo(), Range.getTo());
-        double maxFrom = Math.max(range1.getFrom(), Range.getFrom());
+        double minTo = Math.min(to, range.getTo());
+        double maxFrom = Math.max(from, range.getFrom());
 
         return new Range(maxFrom, minTo);
     }
 
-    public Range[] getMerger(Range range1, Range Range){
+    public Range[] getMerger(Range range) {
         Range[] ranges;
-        if (range1.getTo() <= Range.getFrom() || Range.getTo() <= range1.getFrom()){
+        if (to <= range.getFrom() || range.getTo() <= from) {
             ranges = new Range[2];
-            ranges[0] = range1;
-            ranges[1] = Range;
+            ranges[0] = new Range(from, to);
+            ranges[1] = range;
             return ranges;
         }
 
-        double maxTo = Math.max(range1.getTo(), Range.getTo());
-        double minFrom = Math.min(range1.getFrom(), Range.getFrom());
+        double maxTo = Math.max(to, range.getTo());
+        double minFrom = Math.min(from, range.getFrom());
 
         ranges = new Range[1];
         ranges[0] = new Range(minFrom, maxTo);
+
+        return ranges;
+    }
+
+    public Range[] getDifference(Range range) {
+        Range[] ranges;
+        if (to <= range.getFrom() || range.getTo() <= from) {
+            ranges = new Range[1];
+            ranges[0] = null;
+
+            return ranges;
+        }
+
+        if (from < range.getFrom()) {
+            if (range.getTo() < to) {
+                ranges = new Range[2];
+                ranges[0] = new Range(from, range.getFrom());
+                ranges[1] = new Range(range.getTo(), to);
+            } else {
+                ranges = new Range[1];
+                ranges[0] = new Range(range.getFrom(), to);
+            }
+        } else {
+            ranges = new Range[1];
+            ranges[0] = new Range(from, range.getTo());
+        }
 
         return ranges;
     }

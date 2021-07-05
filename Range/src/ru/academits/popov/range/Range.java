@@ -26,7 +26,7 @@ public class Range {
     }
 
     public void print() {
-        System.out.printf("[%f;%f]\n", from, to);
+        System.out.printf("[%f;%f]%n", from, to);
     }
 
     public double getLength() {
@@ -38,57 +38,40 @@ public class Range {
     }
 
     public Range getIntersection(Range range) {
-        if (to <= range.getFrom() || range.getTo() <= from) {
+        if (to <= range.from || range.to <= from) {
             return null;
         }
 
-        double minTo = Math.min(to, range.getTo());
-        double maxFrom = Math.max(from, range.getFrom());
+        double minTo = Math.min(to, range.to);
+        double maxFrom = Math.max(from, range.from);
 
         return new Range(maxFrom, minTo);
     }
 
-    public Range[] getMerger(Range range) {
-        Range[] ranges;
-        if (to <= range.getFrom() || range.getTo() <= from) {
-            ranges = new Range[2];
-            ranges[0] = new Range(from, to);
-            ranges[1] = range;
-            return ranges;
+    public Range[] getUnion(Range range) {
+        if (to < range.from || range.to < from) {
+            return new Range[]{new Range(from, to), new Range(range.from, range.to)};
         }
 
-        double maxTo = Math.max(to, range.getTo());
-        double minFrom = Math.min(from, range.getFrom());
+        double maxTo = Math.max(to, range.to);
+        double minFrom = Math.min(from, range.from);
 
-        ranges = new Range[1];
-        ranges[0] = new Range(minFrom, maxTo);
-
-        return ranges;
+        return new Range[]{new Range(minFrom, maxTo)};
     }
 
     public Range[] getDifference(Range range) {
-        Range[] ranges;
-        if (to <= range.getFrom() || range.getTo() <= from) {
-            ranges = new Range[1];
-            ranges[0] = null;
-
-            return ranges;
+        if (to <= range.from || range.to <= from) {
+            return new Range[]{};
         }
 
-        if (from < range.getFrom()) {
-            if (range.getTo() < to) {
-                ranges = new Range[2];
-                ranges[0] = new Range(from, range.getFrom());
-                ranges[1] = new Range(range.getTo(), to);
-            } else {
-                ranges = new Range[1];
-                ranges[0] = new Range(range.getFrom(), to);
+        if (from < range.from) {
+            if (range.to < to) {
+                return new Range[]{new Range(from, range.from), new Range(range.to, to)};
             }
-        } else {
-            ranges = new Range[1];
-            ranges[0] = new Range(from, range.getTo());
+
+            return new Range[]{new Range(from, range.from)};
         }
 
-        return ranges;
+        return new Range[]{new Range(range.to, to)};
     }
 }

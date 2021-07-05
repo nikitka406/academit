@@ -2,8 +2,6 @@ package ru.academits.popov.main;
 
 import ru.academits.popov.range.Range;
 
-import java.util.Arrays;
-
 public class Main {
     public static void main(String[] args) {
         double from = 4.5;
@@ -23,8 +21,8 @@ public class Main {
         System.out.println("Конец отрезка = " + range.getTo());
 
         // Range*
-        Range range1 = new Range(3, 9);
-        Range range2 = new Range(1, 2);
+        Range range1 = new Range(4, 9);
+        Range range2 = new Range(1, 4);
 
         System.out.print("Пересечение отрезков = ");
         Range rangeResult = range1.getIntersection(range2);//.print();
@@ -35,7 +33,7 @@ public class Main {
         }
 
         System.out.print("Объединение отрезков = ");
-        Range[] ranges = range1.getMerger(range2);
+        Range[] ranges = range1.getUnion(range2);
         for (Range range3 : ranges) {
             if (range3 != null) {
                 range3.print();
@@ -47,11 +45,11 @@ public class Main {
         System.out.print("Разность отрезков = ");
         ranges = range1.getDifference(range2);
         for (Range range3 : ranges) {
-            if (range3 != null) {
-                range3.print();
-            } else {
-                System.out.println((Object) null);
-            }
+            range3.print();
+        }
+
+        if (ranges.length == 0) {
+            System.out.println("null");
         }
     }
 }

@@ -3,53 +3,56 @@ package ru.academits.popov.main;
 import ru.academits.popov.range.Range;
 
 public class Main {
+    public static void printArrayRange(Range[] ranges) {
+        System.out.print("[");
+
+        for (int i = 0; i < ranges.length; ++i) {
+            System.out.print(ranges[i].toString());
+
+            if (i != ranges.length - 1){
+                System.out.print(", ");
+            }
+        }
+
+        System.out.println("]");
+    }
+
     public static void main(String[] args) {
         double from = 4.5;
         double to = 7.9;
         double number = 5;
-        Range range = new Range(from, to);
+        Range range1 = new Range(from, to);
 
-        System.out.println("Начало отрезка = " + range.getFrom());
-        System.out.println("Конец отрезка = " + range.getTo());
-        System.out.println("Длинна отрезка = " + range.getLength());
-        System.out.println("Входит ли точка " + number + " в отрезок " + range.isInside(number));
+        System.out.println("Начало отрезка = " + range1.getFrom());
+        System.out.println("Конец отрезка = " + range1.getTo());
+        System.out.println("Длинна отрезка = " + range1.getLength());
+        System.out.println("Входит ли точка " + number + " в отрезок " + range1.isInside(number));
 
-        range.setFrom(1);
-        range.setTo(8);
+        range1.setFrom(1);
+        range1.setTo(8);
 
-        System.out.println("Начало отрезка = " + range.getFrom());
-        System.out.println("Конец отрезка = " + range.getTo());
+        System.out.println("Начало отрезка = " + range1.getFrom());
+        System.out.println("Конец отрезка = " + range1.getTo());
 
         // Range*
-        Range range1 = new Range(4, 9);
-        Range range2 = new Range(1, 4);
+        Range range2 = new Range(1, 7);
+        Range range3 = new Range(3, 5);
 
         System.out.print("Пересечение отрезков = ");
-        Range rangeResult = range1.getIntersection(range2);//.print();
+        Range rangeResult = range2.getIntersection(range3);
+
         if (rangeResult != null) {
-            rangeResult.print();
+            System.out.println(rangeResult.toString());
         } else {
-            System.out.println((Object) null);
+            System.out.println("null");
         }
 
         System.out.print("Объединение отрезков = ");
-        Range[] ranges = range1.getUnion(range2);
-        for (Range range3 : ranges) {
-            if (range3 != null) {
-                range3.print();
-            } else {
-                System.out.println((Object) null);
-            }
-        }
+        Range[] ranges = range2.getUnion(range3);
+        printArrayRange(ranges);
 
         System.out.print("Разность отрезков = ");
-        ranges = range1.getDifference(range2);
-        for (Range range3 : ranges) {
-            range3.print();
-        }
-
-        if (ranges.length == 0) {
-            System.out.println("null");
-        }
+        ranges = range2.getDifference(range3);
+        printArrayRange(ranges);
     }
 }

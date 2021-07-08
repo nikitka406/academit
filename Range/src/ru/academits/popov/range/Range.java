@@ -26,7 +26,7 @@ public class Range {
     }
 
     public void print() {
-        System.out.printf("[%f;%f]%n", from, to);
+        System.out.printf("(%f; %f) ", from, to);
     }
 
     public double getLength() {
@@ -61,17 +61,26 @@ public class Range {
 
     public Range[] getDifference(Range range) {
         if (to <= range.from || range.to <= from) {
+            // Не пересекаются
+            return new Range[]{new Range(from, to)};
+        } else if (to < range.to) {
+            // Правый больше левого
             return new Range[]{};
-        }
-
-        if (from < range.from) {
-            if (range.to < to) {
+        } else if (from < range.from) {
+            if (to != range.to){
+                // Вложенный
                 return new Range[]{new Range(from, range.from), new Range(range.to, to)};
             }
 
+            // Вложенный с верхом
             return new Range[]{new Range(from, range.from)};
         }
 
+        // Оставшиеся
         return new Range[]{new Range(range.to, to)};
+    }
+
+    public String toString(){
+        return "(" + from +", " + to + ")";
     }
 }

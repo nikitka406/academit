@@ -1,4 +1,4 @@
-package ru.academits.popov.main;
+package ru.academits.popov.shapes_main;
 
 import ru.academits.popov.shapes.*;
 

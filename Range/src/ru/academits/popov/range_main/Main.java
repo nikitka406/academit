@@ -1,15 +1,15 @@
-package ru.academits.popov.main;
+package ru.academits.popov.range_main;
 
 import ru.academits.popov.range.Range;
 
 public class Main {
-    public static void printArrayRange(Range[] ranges) {
+    public static void printRangesArray(Range[] ranges) {
         System.out.print("[");
 
         for (int i = 0; i < ranges.length; ++i) {
-            System.out.print(ranges[i].toString());
+            System.out.print(ranges[i]);
 
-            if (i != ranges.length - 1){
+            if (i != ranges.length - 1) {
                 System.out.print(", ");
             }
         }
@@ -35,24 +35,24 @@ public class Main {
         System.out.println("Конец отрезка = " + range1.getTo());
 
         // Range*
-        Range range2 = new Range(1, 7);
-        Range range3 = new Range(3, 5);
+        Range range2 = new Range(5, 7);
+        Range range3 = new Range(3, 7);
 
         System.out.print("Пересечение отрезков = ");
         Range rangeResult = range2.getIntersection(range3);
 
         if (rangeResult != null) {
-            System.out.println(rangeResult.toString());
+            System.out.println(rangeResult);
         } else {
             System.out.println("null");
         }
 
         System.out.print("Объединение отрезков = ");
         Range[] ranges = range2.getUnion(range3);
-        printArrayRange(ranges);
+        printRangesArray(ranges);
 
         System.out.print("Разность отрезков = ");
         ranges = range2.getDifference(range3);
-        printArrayRange(ranges);
+        printRangesArray(ranges);
     }
 }

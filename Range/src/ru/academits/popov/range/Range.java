@@ -1,5 +1,7 @@
 package ru.academits.popov.range;
 
+import java.util.Objects;
+
 public class Range {
     private double from;
     private double to;
@@ -25,16 +27,12 @@ public class Range {
         this.to = to;
     }
 
-    public void print() {
-        System.out.printf("(%f; %f) ", from, to);
-    }
-
     public double getLength() {
         return to - from;
     }
 
     public boolean isInside(double number) {
-        return number >= from && number <= to;
+        return number > from && number < to;
     }
 
     public Range getIntersection(Range range) {
@@ -60,27 +58,39 @@ public class Range {
     }
 
     public Range[] getDifference(Range range) {
-        if (to <= range.from || range.to <= from) {
-            // Не пересекаются
-            return new Range[]{new Range(from, to)};
-        } else if (to < range.to) {
-            // Правый больше левого
-            return new Range[]{};
-        } else if (from < range.from) {
-            if (to != range.to){
-                // Вложенный
-                return new Range[]{new Range(from, range.from), new Range(range.to, to)};
-            }
+        Range rangeIntersection = this.getIntersection(range);
 
-            // Вложенный с верхом
-            return new Range[]{new Range(from, range.from)};
+        if (rangeIntersection == null) {
+            return new Range[]{new Range(from, to)};
         }
 
-        // Оставшиеся
-        return new Range[]{new Range(range.to, to)};
+        if (rangeIntersection.equals(this)) {
+            return new Range[]{};
+        }
+
+        if (rangeIntersection.from == from) {
+            return new Range[]{new Range(rangeIntersection.to, to)};
+        }
+
+        if (rangeIntersection.to == to) {
+            return new Range[]{new Range(from, rangeIntersection.from)};
+        }
+
+        return new Range[]{new Range(from, rangeIntersection.from), new Range(rangeIntersection.to, to)};
     }
 
-    public String toString(){
-        return "(" + from +", " + to + ")";
+    @Override
+    public String toString() {
+        return "(" + from + "; " + to + ")";
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        Range range = (Range) o;
+        if (from == range.from && to == range.to) {
+            return true;
+        }
+
+        return false;
     }
 }

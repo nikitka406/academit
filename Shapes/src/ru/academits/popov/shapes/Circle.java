@@ -1,7 +1,7 @@
 package ru.academits.popov.shapes;
 
-public class Circle implements Shapes {
-    private double radius;
+public class Circle implements Shape {
+    private final double radius;
 
     public Circle(double radius) {
         this.radius = radius;
@@ -19,7 +19,7 @@ public class Circle implements Shapes {
 
     @Override
     public double getArea() {
-        return Math.PI * Math.pow(radius, 2);
+        return Math.PI * radius * radius;
     }
 
     @Override

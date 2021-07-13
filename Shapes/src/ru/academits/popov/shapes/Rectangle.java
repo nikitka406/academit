@@ -1,8 +1,8 @@
 package ru.academits.popov.shapes;
 
-public class Rectangle implements Shapes {
-    private double width;
-    private double height;
+public class Rectangle implements Shape {
+    private final double width;
+    private final double height;
 
     public Rectangle(double width, double height) {
         this.width = width;
@@ -26,6 +26,6 @@ public class Rectangle implements Shapes {
 
     @Override
     public double getPerimeter() {
-        return width * 2 + height * 2;
+        return (width + height) * 2;
     }
 }

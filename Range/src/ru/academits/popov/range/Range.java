@@ -1,7 +1,5 @@
 package ru.academits.popov.range;
 
-import java.util.Objects;
-
 public class Range {
     private double from;
     private double to;
@@ -58,7 +56,7 @@ public class Range {
     }
 
     public Range[] getDifference(Range range) {
-        Range rangeIntersection = this.getIntersection(range);
+        Range rangeIntersection = getIntersection(range);
 
         if (rangeIntersection == null) {
             return new Range[]{new Range(from, to)};

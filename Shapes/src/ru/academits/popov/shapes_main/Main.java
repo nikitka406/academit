@@ -36,6 +36,6 @@ public class Main {
         System.out.println("Периметр круга = " + circle.getPerimeter());
 
         // part 2
-        Shapes[] shapes = new Shapes[]{new Circle(9), circle, square, new Rectangle(7, 3), rectangle, triangle, new Square(8)};
+        Shape[] shapes = {new Circle(9), circle, square, new Rectangle(7, 3), rectangle, triangle, new Square(8)};
     }
 }

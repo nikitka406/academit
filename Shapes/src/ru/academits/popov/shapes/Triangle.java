@@ -1,13 +1,12 @@
 package ru.academits.popov.shapes;
 
-public class Triangle implements Shapes {
-
-    private double x1;
-    private double y1;
-    private double x2;
-    private double y2;
-    private double x3;
-    private double y3;
+public class Triangle implements Shape {
+    private final double x1;
+    private final double y1;
+    private final double x2;
+    private final double y2;
+    private final double x3;
+    private final double y3;
 
     public Triangle(double x1, double y1, double x2, double y2, double x3, double y3) {
         this.x1 = x1;
@@ -31,7 +30,7 @@ public class Triangle implements Shapes {
     @Override
     public double getArea() {
         double area = ((x1 - x3) * (y2 - y3) - (x2 - x3) * (y1 - y3)) / 2;
-        return area < 0 ? area * (-1) : area;
+        return Math.abs(area);
     }
 
     @Override

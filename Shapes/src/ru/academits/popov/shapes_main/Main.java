@@ -2,12 +2,23 @@ package ru.academits.popov.shapes_main;
 
 import ru.academits.popov.shapes.*;
 
+import java.util.Arrays;
+import java.util.Comparator;
+
 public class Main {
-//    static Shapes getShapeMaxArea(Shapes[] shapes) {
-//        for(int i =0; i< shapes.length; ++i){
-//            shapes[i]
-//        }
-//    }
+    static Shape getMaxAreaShape(Shape[] shapes) {
+        Comparator<Shape> comparator = Comparator.comparing(Shape::getArea);
+        Arrays.sort(shapes, comparator);
+
+        return shapes[shapes.length - 1];
+    }
+
+    static Shape getSecondPerimeterShape(Shape[] shapes) {
+        Comparator<Shape> comparator = Comparator.comparing(Shape::getPerimeter);
+        Arrays.sort(shapes, comparator);
+
+        return shapes[shapes.length - 2];
+    }
 
     public static void main(String[] args) {
         // part 1
@@ -36,6 +47,28 @@ public class Main {
         System.out.println("Периметр круга = " + circle.getPerimeter());
 
         // part 2
-        Shape[] shapes = {new Circle(9), circle, square, new Rectangle(7, 3), rectangle, triangle, new Square(8)};
+        Shape[] shapes = {
+                new Circle(9),
+                circle,
+                square,
+                new Rectangle(7, 3),
+                rectangle,
+                triangle,
+                new Square(8)
+        };
+
+        Shape maxAreaShape = getMaxAreaShape(shapes);
+        System.out.println("Фигура " + maxAreaShape.getClass() + " с максимальной площадью имеет: ");
+        System.out.println("Ширину = " + maxAreaShape.getWidth());
+        System.out.println("Высоту = " + maxAreaShape.getHeight());
+        System.out.println("Площадь = " + maxAreaShape.getArea());
+        System.out.println("Периметр = " + maxAreaShape.getPerimeter());
+
+        Shape secondPerimeterShape = getSecondPerimeterShape(shapes);
+        System.out.println("Фигура " + secondPerimeterShape.getClass() + " со вторым по величине периметром: ");
+        System.out.println("Ширину = " + secondPerimeterShape.getWidth());
+        System.out.println("Высоту = " + secondPerimeterShape.getHeight());
+        System.out.println("Площадь = " + secondPerimeterShape.getArea());
+        System.out.println("Периметр = " + secondPerimeterShape.getPerimeter());
     }
 }

@@ -35,10 +35,14 @@ public class Triangle implements Shape {
 
     @Override
     public double getPerimeter() {
-        double xy12 = Math.sqrt(Math.pow(x1 - x2, 2) + Math.pow(y1 - y2, 2));
-        double xy13 = Math.sqrt(Math.pow(x1 - x3, 2) + Math.pow(y1 - y3, 2));
-        double xy23 = Math.sqrt(Math.pow(x2 - x3, 2) + Math.pow(y2 - y3, 2));
+        double side1 = getSideLength(x1, y1, x2, y2);
+        double side2 = getSideLength(x2, y2, x3, y3);
+        double side3 = getSideLength(x1, y1, x3, y3);
 
-        return xy12 + xy13 + xy23;
+        return side1 + side2 + side3;
+    }
+
+    public double getSideLength(double x1, double y1, double x2, double y2) {
+        return Math.sqrt((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2));
     }
 }

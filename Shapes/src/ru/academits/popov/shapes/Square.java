@@ -1,29 +1,29 @@
 package ru.academits.popov.shapes;
 
 public class Square implements Shape {
-    private final double length;
+    private final double sideLength;
 
-    public Square(double length) {
-        this.length = length;
+    public Square(double sideLength) {
+        this.sideLength = sideLength;
     }
 
     @Override
     public double getWidth() {
-        return length;
+        return sideLength;
     }
 
     @Override
     public double getHeight() {
-        return length;
+        return sideLength;
     }
 
     @Override
     public double getArea() {
-        return length * length;
+        return sideLength * sideLength;
     }
 
     @Override
     public double getPerimeter() {
-        return length * 4;
+        return sideLength * 4;
     }
 }

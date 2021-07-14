@@ -28,4 +28,30 @@ public class Rectangle implements Shape {
     public double getPerimeter() {
         return (width + height) * 2;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
+        Rectangle rectangle = (Rectangle) o;
+        return height == rectangle.height && width == rectangle.width;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = (int) height * 31;
+        result += width * 31;
+        return result;
+    }
+
+    @Override
+    public String toString() {
+        return "Rectangle with height = " + height + " width = " + width;
+    }
 }

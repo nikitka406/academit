@@ -70,5 +70,17 @@ public class Main {
         System.out.println("Высоту = " + secondPerimeterShape.getHeight());
         System.out.println("Площадь = " + secondPerimeterShape.getArea());
         System.out.println("Периметр = " + secondPerimeterShape.getPerimeter());
+
+        // part3
+        System.out.println(square.equals(square));
+        System.out.println(square.hashCode());
+        System.out.println(triangle.hashCode());
+        System.out.println(circle.hashCode());
+        System.out.println(rectangle.hashCode());
+
+        System.out.println(square);
+        System.out.println(triangle);
+        System.out.println(circle);
+        System.out.println(rectangle);
     }
 }

@@ -30,7 +30,7 @@ public class Range {
     }
 
     public boolean isInside(double number) {
-        return number > from && number < to;
+        return number >= from && number <= to;
     }
 
     public Range getIntersection(Range range) {
@@ -56,39 +56,30 @@ public class Range {
     }
 
     public Range[] getDifference(Range range) {
-        Range rangeIntersection = getIntersection(range);
-
-        if (rangeIntersection == null) {
+        if (to <= range.from || range.to <= from) {
             return new Range[]{new Range(from, to)};
         }
 
-        if (rangeIntersection.equals(this)) {
+        double minTo = Math.min(to, range.to);
+        double maxFrom = Math.max(from, range.from);
+
+        if (maxFrom == from && minTo == to) {
             return new Range[]{};
         }
 
-        if (rangeIntersection.from == from) {
-            return new Range[]{new Range(rangeIntersection.to, to)};
+        if (maxFrom == from) {
+            return new Range[]{new Range(minTo, to)};
         }
 
-        if (rangeIntersection.to == to) {
-            return new Range[]{new Range(from, rangeIntersection.from)};
+        if (minTo == to) {
+            return new Range[]{new Range(from, maxFrom)};
         }
 
-        return new Range[]{new Range(from, rangeIntersection.from), new Range(rangeIntersection.to, to)};
+        return new Range[]{new Range(from, maxFrom), new Range(minTo, to)};
     }
 
     @Override
     public String toString() {
         return "(" + from + "; " + to + ")";
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        Range range = (Range) o;
-        if (from == range.from && to == range.to) {
-            return true;
-        }
-
-        return false;
     }
 }

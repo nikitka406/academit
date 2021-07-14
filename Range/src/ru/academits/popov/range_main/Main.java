@@ -35,24 +35,24 @@ public class Main {
         System.out.println("Конец отрезка = " + range1.getTo());
 
         // Range*
-        Range range2 = new Range(5, 7);
-        Range range3 = new Range(3, 7);
+        Range range2 = new Range(3, 5);
+        Range range3 = new Range(1, 7);
 
         System.out.print("Пересечение отрезков = ");
-        Range rangeResult = range2.getIntersection(range3);
+        Range intersection = range2.getIntersection(range3);
 
-        if (rangeResult != null) {
-            System.out.println(rangeResult);
+        if (intersection != null) {
+            System.out.println(intersection);
         } else {
             System.out.println("null");
         }
 
         System.out.print("Объединение отрезков = ");
-        Range[] ranges = range2.getUnion(range3);
-        printRangesArray(ranges);
+        Range[] union = range2.getUnion(range3);
+        printRangesArray(union);
 
         System.out.print("Разность отрезков = ");
-        ranges = range2.getDifference(range3);
-        printRangesArray(ranges);
+        Range[] difference = range2.getDifference(range3);
+        printRangesArray(difference);
     }
 }

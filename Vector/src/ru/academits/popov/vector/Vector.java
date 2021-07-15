@@ -4,6 +4,10 @@ public class Vector {
     public double[] components;
 
     public Vector(int n) {
+        if(n <= 0){
+            throw new IllegalArgumentException("Exceprion: n <= 0");
+        }
+
         components = new double[n];
 
         for (int i = 0; i < n; ++i) {
@@ -12,6 +16,10 @@ public class Vector {
     }
 
     public Vector(double[] array) {
+        if(array.length <= 0){
+            throw new IllegalArgumentException("Exceprion: n <= 0");
+        }
+
         int size = array.length;
         components = new double[size];
 
@@ -19,6 +27,10 @@ public class Vector {
     }
 
     public Vector(int n, double[] array) {
+        if(n <= 0){
+            throw new IllegalArgumentException("Exceprion: n <= 0");
+        }
+
         int size = array.length;
         components = new double[n];
 
@@ -58,28 +70,46 @@ public class Vector {
     }
 
     public Vector getSum(Vector vector) {
-        if (getSize() != vector.getSize()) {
-            return null;
-        }
+        int length = Math.max(getSize(), vector.getSize());
+        Vector result = new Vector(length);
 
-        Vector result = new Vector(getSize());
-
-        for (int i = 0; i < getSize(); ++i) {
-            result.components[i] = components[i] + vector.components[i];
+        for (int i = 0; i < length; ++i) {
+            if (getSize() == length){
+                if (i < vector.getSize()) {
+                    result.components[i] = components[i] + vector.components[i];
+                } else {
+                    result.components[i] = components[i] + 0;
+                }
+            }else {
+                if (i < getSize()) {
+                    result.components[i] = components[i] + vector.components[i];
+                } else {
+                    result.components[i] = 0 + vector.components[i];
+                }
+            }
         }
 
         return result;
     }
 
     public Vector getDifference(Vector vector) {
-        if (getSize() != vector.getSize()) {
-            return null;
-        }
+        int length = Math.max(getSize(), vector.getSize());
+        Vector result = new Vector(length);
 
-        Vector result = new Vector(getSize());
-
-        for (int i = 0; i < getSize(); ++i) {
-            result.components[i] = components[i] - vector.components[i];
+        for (int i = 0; i < length; ++i) {
+            if (getSize() == length){
+                if (i < vector.getSize()) {
+                    result.components[i] = components[i] - vector.components[i];
+                } else {
+                    result.components[i] = components[i] - 0;
+                }
+            }else {
+                if (i < getSize()) {
+                    result.components[i] = components[i] - vector.components[i];
+                } else {
+                    result.components[i] = 0 - vector.components[i];
+                }
+            }
         }
 
         return result;
@@ -135,11 +165,13 @@ public class Vector {
 
         Vector vector = (Vector) o;
 
-        if (getSize() == vector.getSize()) {
-            for (int i = 0; i < getSize(); ++i) {
-                if (components[i] != vector.components[i]) {
-                    return false;
-                }
+        if (getSize() != vector.getSize()) {
+            return false;
+        }
+
+        for (int i = 0; i < getSize(); ++i) {
+            if (components[i] != vector.components[i]) {
+                return false;
             }
         }
 

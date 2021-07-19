@@ -3,19 +3,28 @@ package ru.academits.popov.shapes_main;
 import ru.academits.popov.shapes.*;
 
 import java.util.Arrays;
-import java.util.Comparator;
 
 public class Main {
-    static Shape getMaxAreaShape(Shape[] shapes) {
-        Comparator<Shape> comparator = Comparator.comparing(Shape::getArea);
-        Arrays.sort(shapes, comparator);
+    public static Shape getMaxAreaShape(Shape[] shapes) {
+        if (shapes.length <= 0) {
+            return null;
+        }
+
+        if (shapes.length == 1) {
+            return shapes[0];
+        }
+
+        Arrays.sort(shapes, new ShapeByAreaComparator());
 
         return shapes[shapes.length - 1];
     }
 
-    static Shape getSecondPerimeterShape(Shape[] shapes) {
-        Comparator<Shape> comparator = Comparator.comparing(Shape::getPerimeter);
-        Arrays.sort(shapes, comparator);
+    public static Shape getSecondPerimeterShape(Shape[] shapes) {
+        if (shapes.length <= 1) {
+            return null;
+        }
+
+        Arrays.sort(shapes, new ShapeByPerimeterComparator());
 
         return shapes[shapes.length - 2];
     }
@@ -58,18 +67,26 @@ public class Main {
         };
 
         Shape maxAreaShape = getMaxAreaShape(shapes);
-        System.out.println("Фигура " + maxAreaShape.getClass() + " с максимальной площадью имеет: ");
-        System.out.println("Ширину = " + maxAreaShape.getWidth());
-        System.out.println("Высоту = " + maxAreaShape.getHeight());
-        System.out.println("Площадь = " + maxAreaShape.getArea());
-        System.out.println("Периметр = " + maxAreaShape.getPerimeter());
+        if (maxAreaShape == null) {
+            System.out.println("Невозможно найти максимальную площадь");
+        } else {
+            System.out.println("Фигура " + maxAreaShape.getClass() + " с максимальной площадью имеет: ");
+            System.out.println("Ширину = " + maxAreaShape.getWidth());
+            System.out.println("Высоту = " + maxAreaShape.getHeight());
+            System.out.println("Площадь = " + maxAreaShape.getArea());
+            System.out.println("Периметр = " + maxAreaShape.getPerimeter());
+        }
 
         Shape secondPerimeterShape = getSecondPerimeterShape(shapes);
-        System.out.println("Фигура " + secondPerimeterShape.getClass() + " со вторым по величине периметром: ");
-        System.out.println("Ширину = " + secondPerimeterShape.getWidth());
-        System.out.println("Высоту = " + secondPerimeterShape.getHeight());
-        System.out.println("Площадь = " + secondPerimeterShape.getArea());
-        System.out.println("Периметр = " + secondPerimeterShape.getPerimeter());
+        if (secondPerimeterShape == null) {
+            System.out.println("Невозможно найти фигуру с вторым периметрм");
+        } else {
+            System.out.println("Фигура " + secondPerimeterShape.getClass() + " со вторым по величине периметром: ");
+            System.out.println("Ширину = " + secondPerimeterShape.getWidth());
+            System.out.println("Высоту = " + secondPerimeterShape.getHeight());
+            System.out.println("Площадь = " + secondPerimeterShape.getArea());
+            System.out.println("Периметр = " + secondPerimeterShape.getPerimeter());
+        }
 
         // part3
         System.out.println(square.equals(square));

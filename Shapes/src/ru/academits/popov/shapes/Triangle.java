@@ -17,6 +17,30 @@ public class Triangle implements Shape {
         this.y3 = y3;
     }
 
+    public double getX1() {
+        return x1;
+    }
+
+    public double getY1() {
+        return y1;
+    }
+
+    public double getX2() {
+        return x2;
+    }
+
+    public double getY2() {
+        return y2;
+    }
+
+    public double getX3() {
+        return x3;
+    }
+
+    public double getY3() {
+        return y3;
+    }
+
     @Override
     public double getWidth() {
         return Math.max(Math.max(x1, x2), x3) - Math.min(Math.min(x1, x2), x3);
@@ -29,20 +53,15 @@ public class Triangle implements Shape {
 
     @Override
     public double getArea() {
-        double area = ((x1 - x3) * (y2 - y3) - (x2 - x3) * (y1 - y3)) / 2;
-        return Math.abs(area);
+        return Math.abs(((x1 - x3) * (y2 - y3) - (x2 - x3) * (y1 - y3)) / 2);
     }
 
     @Override
     public double getPerimeter() {
-        double side1 = getSideLength(x1, y1, x2, y2);
-        double side2 = getSideLength(x2, y2, x3, y3);
-        double side3 = getSideLength(x1, y1, x3, y3);
-
-        return side1 + side2 + side3;
+        return getSideLength(x1, y1, x2, y2) + getSideLength(x2, y2, x3, y3) + getSideLength(x1, y1, x3, y3);
     }
 
-    public double getSideLength(double x1, double y1, double x2, double y2) {
+    private static double getSideLength(double x1, double y1, double x2, double y2) {
         return Math.sqrt((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2));
     }
 
@@ -57,23 +76,25 @@ public class Triangle implements Shape {
         }
 
         Triangle triangle = (Triangle) o;
-        return x1 == triangle.x1 && y1 == triangle.y1 && x2 == triangle.x2 && y2 == triangle.y2
+        return x1 == triangle.x1 && y1 == triangle.y1
+                && x2 == triangle.x2 && y2 == triangle.y2
                 && x3 == triangle.x3 && y3 == triangle.y3;
     }
 
     @Override
     public int hashCode() {
-        int result = 0;
-        result += x1 + y1;
-        result += x2 + y2 * 31;
-        result += x3 + y3 * 31;
-        return result;
+        final int prime = 37;
+        double hash = 1;
+        hash += prime * hash + x1 + y1;
+        hash += prime * hash + x2 + y2;
+        hash += prime * hash + x3 + y3;
+        return Double.hashCode(hash);
     }
 
     @Override
     public String toString() {
-        return "Triangle with (x1; y1) = " + "(" + x1 + "; " + y1 + ") " +
-                "(x2; y2) = " + "(" + x2 + "; " + y2 + ") " +
-                "(x3; y3) = " + "(" + x3 + "; " + y3 + ")";
+        return "Triangle with (" + x1 + "; " + y1 +
+                "), (" + x2 + "; " + y2 +
+                "), (" + x3 + "; " + y3 + ")";
     }
 }

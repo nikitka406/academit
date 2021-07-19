@@ -7,6 +7,10 @@ public class Square implements Shape {
         this.sideLength = sideLength;
     }
 
+    public double getSideLength() {
+        return sideLength;
+    }
+
     @Override
     public double getWidth() {
         return sideLength;
@@ -28,26 +32,26 @@ public class Square implements Shape {
     }
 
     @Override
-    public boolean equals(Object o){
+    public boolean equals(Object o) {
         if (this == o) {
             return true;
         }
 
-        if (o == null || getClass() != o.getClass()){
+        if (o == null || getClass() != o.getClass()) {
             return false;
         }
 
         Square square = (Square) o;
-        return sideLength ==  square.sideLength;
+        return sideLength == square.sideLength;
     }
 
     @Override
-    public int hashCode(){
-        return (int) sideLength;
+    public int hashCode() {
+        return Double.hashCode(sideLength);
     }
 
     @Override
-    public String toString(){
+    public String toString() {
         return "Square with sideLength = " + sideLength;
     }
 }

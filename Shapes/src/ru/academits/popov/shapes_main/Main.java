@@ -6,12 +6,8 @@ import java.util.Arrays;
 
 public class Main {
     public static Shape getMaxAreaShape(Shape[] shapes) {
-        if (shapes.length <= 0) {
+        if (shapes.length == 0) {
             return null;
-        }
-
-        if (shapes.length == 1) {
-            return shapes[0];
         }
 
         Arrays.sort(shapes, new ShapeByAreaComparator());

@@ -1,46 +1,36 @@
 package ru.academits.popov.vector;
 
+import java.util.Arrays;
+
 public class Vector {
-    public double[] components;
+    private double[] components;
 
-    public Vector(int n) {
-        if(n <= 0){
-            throw new IllegalArgumentException("Exceprion: n <= 0");
+    public Vector(int size) {
+        if(size <= 0){
+            throw new IllegalArgumentException("Exception: n <= 0");
         }
 
-        components = new double[n];
-
-        for (int i = 0; i < n; ++i) {
-            components[i] = 0;
-        }
+        components = new double[size];
     }
 
     public Vector(double[] array) {
         if(array.length <= 0){
-            throw new IllegalArgumentException("Exceprion: n <= 0");
+            throw new IllegalArgumentException("Exception: n <= 0");
         }
 
-        int size = array.length;
-        components = new double[size];
+        components = new double[array.length];
 
-        System.arraycopy(array, 0, components, 0, size);
+        System.arraycopy(array, 0, components, 0, array.length);
     }
 
-    public Vector(int n, double[] array) {
-        if(n <= 0){
-            throw new IllegalArgumentException("Exceprion: n <= 0");
+    public Vector(int size, double[] array) {
+        if(size <= 0){
+            throw new IllegalArgumentException("Exception: n <= 0");
         }
 
-        int size = array.length;
-        components = new double[n];
+        components = new double[size];
 
-        for (int i = 0; i < n; ++i) {
-            if (i < size) {
-                components[i] = array[i];
-            } else {
-                components[i] = 0;
-            }
-        }
+        System.arraycopy(array, 0, components, 0, array.length);
     }
 
     public Vector(Vector vector) {
@@ -55,18 +45,18 @@ public class Vector {
 
     @Override
     public String toString() {
-        String string = "{";
+        StringBuilder string = new StringBuilder("{");
 
         for (int i = 0; i < getSize(); ++i) {
-            string += components[i];
+            string.append(components[i]);
+
             if (i != getSize() - 1) {
-                string += ", ";
+                string.append(", ");
             }
         }
 
-        string += "}";
-
-        return string;
+        string.append("}");
+        return string.toString();
     }
 
     public Vector getSum(Vector vector) {
@@ -189,4 +179,15 @@ public class Vector {
         return hashCode * getSize();
     }
 
+    public static Vector getSum(Vector vector1, Vector vector2){
+        return vector1.getSum(vector2);
+    }
+
+    public static Vector getDifference(Vector vector1, Vector vector2){
+        return vector1.getDifference(vector2);
+    }
+
+    public static Vector getScalarMultiplication(Vector vector, double number){
+        return vector.getScalarMultiplication(number);
+    }
 }

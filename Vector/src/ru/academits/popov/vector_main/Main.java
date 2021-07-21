@@ -3,62 +3,6 @@ package ru.academits.popov.vector_main;
 import ru.academits.popov.vector.Vector;
 
 public class Main {
-    static public Vector getSum(Vector vector1, Vector vector2) {
-        int length = Math.max(vector1.getSize(), vector2.getSize());
-        Vector result = new Vector(length);
-
-        for (int i = 0; i < length; ++i) {
-            if (vector1.getSize() == length) {
-                if (i < vector2.getSize()) {
-                    result.components[i] = vector1.components[i] + vector2.components[i];
-                } else {
-                    result.components[i] = vector1.components[i] + 0;
-                }
-            } else {
-                if (i < vector1.getSize()) {
-                    result.components[i] = vector1.components[i] + vector2.components[i];
-                } else {
-                    result.components[i] = 0 + vector2.components[i];
-                }
-            }
-        }
-
-        return result;
-    }
-
-    static public Vector getDifference(Vector vector1, Vector vector2) {
-        int length = Math.max(vector1.getSize(), vector2.getSize());
-        Vector result = new Vector(length);
-
-        for (int i = 0; i < length; ++i) {
-            if (vector1.getSize() == length) {
-                if (i < vector2.getSize()) {
-                    result.components[i] = vector1.components[i] - vector2.components[i];
-                } else {
-                    result.components[i] = vector1.components[i] - 0;
-                }
-            } else {
-                if (i < vector1.getSize()) {
-                    result.components[i] = vector1.components[i] - vector2.components[i];
-                } else {
-                    result.components[i] = 0 - vector2.components[i];
-                }
-            }
-        }
-
-        return result;
-    }
-
-    static public Vector getScalarMultiplication(Vector vector, double number) {
-        Vector result = new Vector(vector.getSize());
-
-        for (int i = 0; i < vector.getSize(); ++i) {
-            result.components[i] = vector.components[i] * number;
-        }
-
-        return result;
-    }
-
     public static void main(String[] args) {
         Vector vector1 = new Vector(5);
         System.out.println(vector1);
@@ -82,11 +26,11 @@ public class Main {
         System.out.println("Сумма векторов 3 и 4" + vector3.getSum(vector4));
         System.out.println("Разница векторов 4 и 3" + vector4.getDifference(vector3));
         System.out.println("Разница векторов 3 и 4" + vector3.getDifference(vector4));
-        System.out.println("Статическая сумма векторов 4 и 3" + getSum(vector4, vector3));
-        System.out.println("Статическая сумма векторов 3 и 4" + getSum(vector3, vector4));
-        System.out.println("Статическая разница векторов 4 и 3" + getDifference(vector4, vector3));
-        System.out.println("Статическая разница векторов 3 и 4" + getDifference(vector3, vector4));
+        System.out.println("Статическая сумма векторов 4 и 3" + Vector.getSum(vector4, vector3));
+        System.out.println("Статическая сумма векторов 3 и 4" + Vector.getSum(vector3, vector4));
+        System.out.println("Статическая разница векторов 4 и 3" + Vector.getDifference(vector4, vector3));
+        System.out.println("Статическая разница векторов 3 и 4" + Vector.getDifference(vector3, vector4));
         System.out.println("Умножение вектора 4 на 5" + vector4.getScalarMultiplication(5));
-        System.out.println("Статическое умножение вектора 4 на 5" + getScalarMultiplication(vector4, 5));
+        System.out.println("Статическое умножение вектора 4 на 5" + Vector.getScalarMultiplication(vector4, 5));
     }
 }

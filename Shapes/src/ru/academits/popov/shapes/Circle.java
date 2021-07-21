@@ -7,7 +7,7 @@ public class Circle implements Shape {
         this.radius = radius;
     }
 
-    public double getRadius(){
+    public double getRadius() {
         return radius;
     }
 
@@ -32,26 +32,26 @@ public class Circle implements Shape {
     }
 
     @Override
-    public boolean equals(Object o){
+    public boolean equals(Object o) {
         if (this == o) {
             return true;
         }
 
-        if (o == null || getClass() != o.getClass()){
+        if (o == null || getClass() != o.getClass()) {
             return false;
         }
 
         Circle circle = (Circle) o;
-        return radius ==  circle.radius;
+        return radius == circle.radius;
     }
 
     @Override
-    public int hashCode(){
+    public int hashCode() {
         return Double.hashCode(radius);
     }
 
     @Override
-    public String toString(){
+    public String toString() {
         return "Circle with radius = " + radius;
     }
 }

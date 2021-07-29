@@ -18,7 +18,7 @@ public class Main {
 
         System.out.println("Размерность вектора4 = " + vector4.getSize());
         System.out.println("Длина вектора4 = " + vector4.getLength());
-        vector4.revers();
+        vector4.reverse();
         System.out.println("Разворот вектора4 = " + vector4);
         System.out.println("Длина вектора4 = " + vector4.hashCode());
         System.out.println("Равенство векторов 3 и 4 " + vector4.equals(vector3));

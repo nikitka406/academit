@@ -23,7 +23,7 @@ public class Vector {
 
     public Vector(int size, double[] array) {
         if (size <= 0) {
-            throw new IllegalArgumentException("Переданный размер массива не может быть меньше или равен нулю, size = " + size);
+            throw new IllegalArgumentException("Переданный размер вектора не может быть меньше или равен нулю, size = " + size);
         }
 
         components = Arrays.copyOf(array, size);
@@ -56,11 +56,9 @@ public class Vector {
     public void add(Vector vector) {
         if (components.length < vector.components.length) {
             components = Arrays.copyOf(components, vector.components.length);
-        } else if (components.length > vector.components.length) {
-            vector.components = Arrays.copyOf(vector.components, components.length);
         }
 
-        for (int i = 0; i < components.length; ++i) {
+        for (int i = 0; i < vector.components.length; ++i) {
             components[i] += vector.components[i];
         }
     }
@@ -68,11 +66,9 @@ public class Vector {
     public void subtract(Vector vector) {
         if (components.length < vector.components.length) {
             components = Arrays.copyOf(components, vector.components.length);
-        } else if (components.length > vector.components.length) {
-            vector.components = Arrays.copyOf(vector.components, components.length);
         }
 
-        for (int i = 0; i < components.length; ++i) {
+        for (int i = 0; i < vector.components.length; ++i) {
             components[i] -= vector.components[i];
         }
     }
@@ -125,9 +121,7 @@ public class Vector {
         final int prime = 37;
         int hashCode = 1;
 
-        hashCode += hashCode * prime + Arrays.hashCode(components);
-
-        return hashCode;
+        return hashCode * prime + Arrays.hashCode(components);
     }
 
     public static Vector getSum(Vector vector1, Vector vector2) {
@@ -143,13 +137,13 @@ public class Vector {
     }
 
     public static double getScalarProduct(Vector vector1, Vector vector2) {
-        double scalarComposition = 0;
+        double scalarProduct = 0;
         int minLength = Math.min(vector1.components.length, vector2.components.length);
 
         for (int i = 0; i < minLength; ++i) {
-            scalarComposition += vector1.components[i] * vector2.components[i];
+            scalarProduct += vector1.components[i] * vector2.components[i];
         }
 
-        return scalarComposition;
+        return scalarProduct;
     }
 }

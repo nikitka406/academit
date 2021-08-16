@@ -31,7 +31,7 @@ public class Main {
         System.out.println("Количество строк = " + test4.getRowsCount());
 
         System.out.println("Столбец №" + 1 + " матрицы = " + test4.getColumn(1));
-        System.out.println("Строка №" + 2 + " матрицы = " + test4.getRows(2));
+        System.out.println("Строка №" + 2 + " матрицы = " + test4.getRow(2));
 
         double[][] matrix2 = {{1, 2, 3, 4}, {5, 6, 7, 8}, {9, 10, 11, 12}, {13, 14, 15, 16}};
         Matrix test5 = new Matrix(matrix2);
@@ -42,19 +42,19 @@ public class Main {
         test5.multiplyByScalar(5);
         System.out.println("Умножение матрицы на скаляр 5 = " + test5);
 
-        test4.add(test5);
+        test5.add(test5);
         System.out.println("Сложение двух матриц = " + test4);
 
-        test5.subtract(test4);
+        test5.subtract(test5);
         System.out.println("Вычетание двух матриц = " + test5);
 
-        System.out.println("Статическое сложение матриц = " + getSum(test5, test4));
+        System.out.println("Статическое сложение матриц = " + getSum(test5, test5));
 
-        System.out.println("Статическое вычитание матриц = " + getDifference(test5, test4));
+        System.out.println("Статическое вычитание матриц = " + getDifference(test5, test5));
 
         Vector vector = new Vector(row3);
         System.out.println("Произведение матрицы на вектор = " + test4.multiplyByVector(vector));
 
-        System.out.println("Произведение матриц = " + getMatrixProduct(test5, test4));
+        System.out.println("Произведение матриц = " + getProduct(test5, test5));
     }
 }

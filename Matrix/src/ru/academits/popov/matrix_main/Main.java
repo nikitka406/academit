@@ -56,5 +56,9 @@ public class Main {
         System.out.println("Произведение матрицы на вектор = " + test4.multiplyByVector(vector));
 
         System.out.println("Произведение матриц = " + getProduct(test5, test5));
+
+        double[][] matrix3 = {{2, 4, 1}, {0,2,1}, {2,1,1}};
+        Matrix test6 = new Matrix(matrix3);
+        System.out.println("Детерминант матрицы = " + test6.getDeterminant());
     }
 }

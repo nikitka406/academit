@@ -170,10 +170,45 @@ public class Matrix {
         }
     }
 
-    //todo
+    public double getDeterminant() {
+        if (getRowsCount() != getColumnsCount()) {
+            throw new IllegalArgumentException("Матрица должна быть квадратная, количество строк = "
+                    + getRowsCount() + " количество столбцов = " + getColumnsCount());
+        }
+
+        if (getRowsCount() == 1) {
+            return rows[0].getComponent(0);
+        }
+
+        if (getRowsCount() == 2) {
+            return rows[0].getComponent(0) * rows[1].getComponent(1) - rows[0].getComponent(1) * rows[1].getComponent(0);
+        }
+
+        double determinate = 0;
+        // Расскладываем по столбцу
+        for (int i = 0; i < getRowsCount(); ++i) {
+            double[][] minor = new double[getRowsCount() - 1][getColumnsCount() - 1];
+
+            for (int j = 0; j < getRowsCount(); ++j) {
+                int indexByMinor = 0;
+
+                for (int k = 1; k < getColumnsCount(); ++k) {
+                    if (i != j) {
+                        minor[indexByMinor][k - 1] = rows[j].getComponent(k);
+                        ++indexByMinor;
+                    }
+                }
+            }
+
+            determinate += rows[i].getComponent(0) * Math.pow(-1, (i + 1) + 1) * new Matrix(minor).getDeterminant();
+        }
+
+        return determinate;
+    }
+
     public Vector multiplyByVector(Vector vector) {
-        if (vector.getSize() != getColumnsCount()){
-            throw  new IllegalArgumentException("Размер вектора = " + vector.getSize() +
+        if (vector.getSize() != getColumnsCount()) {
+            throw new IllegalArgumentException("Размер вектора = " + vector.getSize() +
                     " должен совпадать с количеством столбцов в матрице = " + getColumnsCount());
         }
         Vector result = new Vector(rows.length);

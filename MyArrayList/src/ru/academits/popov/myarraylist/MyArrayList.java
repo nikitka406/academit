@@ -9,7 +9,7 @@ public class MyArrayList<E> implements List<E> {
 
     public MyArrayList(int size) {
         if (size < 0) {
-            throw new IllegalArgumentException("Размер списка не может быть ментьше нуляб size = " + size);
+            throw new IllegalArgumentException("Размер списка не может быть ментьше нуля, size = " + size);
         }
         //noinspection unchecked
         items = (E[]) new Object[size];
@@ -44,7 +44,7 @@ public class MyArrayList<E> implements List<E> {
 
     @Override
     public Iterator<E> iterator() {
-        return null;
+        return new MyListIterator();
     }
 
     @Override
@@ -89,28 +89,79 @@ public class MyArrayList<E> implements List<E> {
     }
 
     @Override
-    public boolean containsAll(Collection<?> c) {
-        return false;
+    public boolean containsAll(Collection<?> objects) {
+        for (Object object : objects) {
+            if (!contains(object)) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     @Override
-    public boolean addAll(Collection<? extends E> c) {
-        return false;
+    public boolean addAll(Collection<? extends E> objects) {
+        addAll(size, objects);
+
+        return true;
     }
 
     @Override
-    public boolean addAll(int index, Collection<? extends E> c) {
-        return false;
+    public boolean addAll(int index, Collection<? extends E> objects) {
+        if (index < 0 || index >= size) {
+            throw new IllegalArgumentException("Индекс выходит за границы списка, index = " + index);
+        }
+
+        if (size + objects.size() >= items.length) {
+            increaseCapacity();
+        }
+
+        int addCount = 0;
+        for (E object : objects) {
+            items[size + addCount] = object;
+            addCount++;
+            size++;
+        }
+
+        modifyCount++;
+
+        return true;
     }
 
     @Override
-    public boolean removeAll(Collection<?> c) {
-        return false;
+    public boolean removeAll(Collection<?> objects) {
+        boolean deleteIndicator = true;
+
+        for (Object object : objects) {
+            int index = indexOf(object);
+
+            if (index == -1) {
+                deleteIndicator = false;
+            }
+
+            while (index != -1) {
+                remove(index);
+                index = indexOf(object);
+            }
+        }
+
+        return deleteIndicator;
     }
 
     @Override
-    public boolean retainAll(Collection<?> c) {
-        return false;
+    public boolean retainAll(Collection<?> objects) {
+        int deletesCont = 0;
+
+        for (int i = 0; i < size - deletesCont; ++i) {
+            if (!objects.contains(items[i])) {
+                remove(items[i]);
+                deletesCont++;
+            }
+        }
+
+        modifyCount++;
+
+        return true;
     }
 
     @Override
@@ -147,12 +198,12 @@ public class MyArrayList<E> implements List<E> {
         }
 
         E oldElement = items[index];
-        ensureCapacity(size+1);
+        ensureCapacity(size + 1);
         size++;
         modifyCount++;
         items[index] = element;
 
-        for (int i = index+1; i < size; ++i){
+        for (int i = index + 1; i < size; ++i) {
             E temp = items[i];
             items[i] = oldElement;
             oldElement = temp;
@@ -231,5 +282,40 @@ public class MyArrayList<E> implements List<E> {
 
         items = Arrays.copyOf(items, size);
         this.size = 0;
+    }
+
+    public class MyListIterator implements Iterator<E> {
+        private int index = -1;
+        private int modCount = modifyCount;
+
+        @Override
+        public boolean hasNext() {
+            return index + 1 < size;
+        }
+
+        @Override
+        public E next() {
+            if (modCount != modifyCount) {
+                throw new ConcurrentModificationException("Список был изменен.");
+            }
+            if (!hasNext()) {
+                throw new NoSuchElementException("Список закончился, нет следующего элемента.");
+            }
+
+            index++;
+            return items[index];
+        }
+    }
+
+    public void increaseCapacity() {
+        int newSize = 0;
+
+        if (items.length == 0) {
+            newSize = 1;
+        } else {
+            newSize = items.length * 2;
+        }
+
+        items = Arrays.copyOf(items, newSize);
     }
 }

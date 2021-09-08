@@ -13,7 +13,7 @@ public class MyArrayList<E> implements List<E> {
         }
         //noinspection unchecked
         items = (E[]) new Object[size];
-        this.size = size;
+        this.size = 0;
         modifyCount = 0;
     }
 
@@ -53,8 +53,19 @@ public class MyArrayList<E> implements List<E> {
     }
 
     @Override
-    public <T> T[] toArray(T[] a) {
-        return null;
+    @SuppressWarnings({"SuspiciousSystemArraycopy", "unchecked"})
+    public <E1> E1[] toArray(E1[] a) {
+        if (a.length < size) {
+            return (E1[]) Arrays.copyOf(items, size, a.getClass());
+        }
+
+        System.arraycopy(items, 0, a, 0, size);
+
+        if (a.length > size) {
+            a[size] = null;
+        }
+
+        return a;
     }
 
     @Override
@@ -74,10 +85,10 @@ public class MyArrayList<E> implements List<E> {
 
     @Override
     public boolean remove(Object o) {
-        int index = (int) o;
+        int index = indexOf(o);
 
-        if (index < 0 || index >= size) {
-            throw new IllegalArgumentException("Индекс выходит за границы списка, index = " + index);
+        if (index == -1) {
+            throw new IllegalArgumentException("В списке нет элемента с таким индексом, o = " + o);
         }
 
         if (size - 1 - index >= 0) System.arraycopy(items, index + 1, items, index, size - 1 - index);
@@ -116,13 +127,16 @@ public class MyArrayList<E> implements List<E> {
             increaseCapacity();
         }
 
-        int addCount = 0;
-        for (E object : objects) {
-            items[size + addCount] = object;
-            addCount++;
-            size++;
+        System.arraycopy(items, index, items, index + objects.size(), size - index);
+
+        int i = index;
+
+        for (E e : objects) {
+            items[i] = e;
+            i++;
         }
 
+        size += objects.size();
         modifyCount++;
 
         return true;
@@ -317,5 +331,22 @@ public class MyArrayList<E> implements List<E> {
         }
 
         items = Arrays.copyOf(items, newSize);
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder stringBuilder = new StringBuilder("[");
+
+        for (int i = 0; i < size; ++i) {
+            stringBuilder.append(items[i]);
+
+            if (i != size - 1) {
+                stringBuilder.append(", ");
+            }
+        }
+
+        stringBuilder.append("]");
+
+        return stringBuilder.toString();
     }
 }

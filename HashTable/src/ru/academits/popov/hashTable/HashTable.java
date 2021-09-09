@@ -44,7 +44,15 @@ public class HashTable<T> implements Collection<T> {
 
     @Override
     public Object[] toArray() {
-        return new Object[0];
+        Object[] items = new Object[hashTable.length];
+        int index = 0;
+
+        for (ArrayList<T> hashElement: hashTable){
+            items[index] = hashElement;
+            index++;
+        }
+
+        return items;
     }
 
     @Override

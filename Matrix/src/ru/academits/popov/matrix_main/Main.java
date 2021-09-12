@@ -13,8 +13,8 @@ public class Main {
         double[] row1 = {1, 2, 3};
         double[] row2 = {4, 5};
         double[] row3 = {7, 8, 9, 10};
-        double[][] arrayVectors1 = {row1, row2, row3};
-        Matrix matrix2 = new Matrix(arrayVectors1);
+        double[][] array = {row1, row2, row3};
+        Matrix matrix2 = new Matrix(array);
         System.out.println(matrix2);
 
         Vector vector1 = new Vector(3);

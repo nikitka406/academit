@@ -9,11 +9,11 @@ public class Matrix {
 
     public Matrix(int rowsCount, int columnsCount) {
         if (rowsCount <= 0) {
-            throw new IllegalArgumentException("Количество строк в матрице не может быть меньше и равно 0, n = " + rowsCount);
+            throw new IllegalArgumentException("Количество строк в матрице не может быть меньше или равно 0, rowsCount = " + rowsCount);
         }
 
         if (columnsCount <= 0) {
-            throw new IllegalArgumentException("Количество столбцов в матрице не может быть меньше ии равно 0, m = " + columnsCount);
+            throw new IllegalArgumentException("Количество столбцов в матрице не может быть меньше или равно 0, columnsCount = " + columnsCount);
         }
 
         rows = new Vector[rowsCount];
@@ -38,9 +38,9 @@ public class Matrix {
 
         int maxSize = 0;
 
-        for (double[] rows : matrix) {
-            if (maxSize < rows.length) {
-                maxSize = rows.length;
+        for (double[] row : matrix) {
+            if (maxSize < row.length) {
+                maxSize = row.length;
             }
         }
 
@@ -86,7 +86,7 @@ public class Matrix {
 
     public Vector getRow(int index) {
         if (index < 0 || index >= rows.length) {
-            throw new IndexOutOfBoundsException("Нет строки с номером, " + index);
+            throw new IndexOutOfBoundsException("Нет строки с индексом, " + index + ". Допустимый диапазон: от 0 до " + rows.length);
         }
 
         return new Vector(rows[index]);
@@ -94,7 +94,7 @@ public class Matrix {
 
     public void setRow(int index, Vector vector) {
         if (index < 0 || index >= rows.length) {
-            throw new IndexOutOfBoundsException("Нет строки с номером, " + index);
+            throw new IndexOutOfBoundsException("Нет строки с индексом, " + index + ". Допустимый диапазон: от 0 до " + rows.length);
         }
 
         if (vector.getSize() != getColumnsCount()) {
@@ -107,7 +107,7 @@ public class Matrix {
 
     public Vector getColumn(int index) {
         if (index < 0 || index >= getColumnsCount()) {
-            throw new IndexOutOfBoundsException("Нет колонки с номером, " + index);
+            throw new IndexOutOfBoundsException("Нет строки с индексом, " + index + ". Допустимый диапазон: от 0 до " + getColumnsCount());
         }
 
         Vector column = new Vector(rows.length);
@@ -123,14 +123,12 @@ public class Matrix {
     public String toString() {
         StringBuilder stringBuilder = new StringBuilder("{");
 
-        for (int i = 0; i < rows.length; ++i) {
-            stringBuilder.append(rows[i]);
-
-            if (i != rows.length - 1) {
-                stringBuilder.append(", ");
-            }
+        for (Vector row : rows) {
+            stringBuilder.append(row);
+            stringBuilder.append(", ");
         }
 
+        stringBuilder.deleteCharAt(stringBuilder.length()-1);
         stringBuilder.append("}");
         return stringBuilder.toString();
     }
@@ -152,7 +150,7 @@ public class Matrix {
     }
 
     public void add(Matrix matrix) {
-        checkingMatrixSize(this, matrix);
+        checkSizeMatrix(this, matrix);
 
         for (int i = 0; i < matrix.rows.length; ++i) {
             rows[i].add(matrix.rows[i]);
@@ -160,7 +158,7 @@ public class Matrix {
     }
 
     public void subtract(Matrix matrix) {
-        checkingMatrixSize(this, matrix);
+        checkSizeMatrix(this, matrix);
 
         for (int i = 0; i < matrix.rows.length; ++i) {
             rows[i].subtract(matrix.rows[i]);
@@ -208,6 +206,7 @@ public class Matrix {
             throw new IllegalArgumentException("Размер вектора = " + vector.getSize() +
                     " должен совпадать с количеством столбцов в матрице = " + getColumnsCount());
         }
+
         Vector result = new Vector(rows.length);
 
         for (int i = 0; i < rows.length; ++i) {
@@ -218,7 +217,7 @@ public class Matrix {
     }
 
     public static Matrix getSum(Matrix matrix1, Matrix matrix2) {
-        checkingMatrixSize(matrix1, matrix2);
+        checkSizeMatrix(matrix1, matrix2);
 
         Matrix result = new Matrix(matrix1);
         result.add(matrix2);
@@ -226,7 +225,7 @@ public class Matrix {
     }
 
     public static Matrix getDifference(Matrix matrix1, Matrix matrix2) {
-        checkingMatrixSize(matrix1, matrix2);
+        checkSizeMatrix(matrix1, matrix2);
 
         Matrix result = new Matrix(matrix1);
         result.subtract(matrix2);
@@ -239,7 +238,7 @@ public class Matrix {
                     "Количество столбцов первой матицы = " + matrix1.getColumnsCount() + ", количество строк второй матрицы = " + matrix2.getRowsCount());
         }
 
-        Matrix result = new Matrix(matrix1.rows.length, matrix1.getColumnsCount());
+        Matrix result = new Matrix(matrix1.rows.length, matrix2.getColumnsCount());
 
         for (int i = 0; i < result.rows.length; ++i) {
             for (int j = 0; j < result.getColumnsCount(); ++j) {
@@ -250,7 +249,7 @@ public class Matrix {
         return result;
     }
 
-    public static void checkingMatrixSize(Matrix matrix1, Matrix matrix2) {
+    private static void checkSizeMatrix(Matrix matrix1, Matrix matrix2) {
         if (matrix1.getRowsCount() != matrix2.getRowsCount() || matrix1.getColumnsCount() != matrix2.getColumnsCount()) {
             throw new IllegalArgumentException("Матрицы должны быть одинакового размера, matrix1 = "
                     + matrix1.getRowsCount() + "x" + matrix1.getColumnsCount() + " matrix2 = " + matrix2.getRowsCount() + "x" + matrix2.getColumnsCount());

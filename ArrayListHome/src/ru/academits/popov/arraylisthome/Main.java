@@ -6,17 +6,16 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Iterator;
 
 public class Main {
     public static void main(String[] args) {
-        ArrayList<String> fileLine = new ArrayList<>();
+        ArrayList<String> fileLines = new ArrayList<>();
 
         try (BufferedReader bufferedReader = new BufferedReader(new FileReader("ArrayListHome/input.txt"))) {
             String line;
 
             while ((line = bufferedReader.readLine()) != null) {
-                fileLine.add(line);
+                fileLines.add(line);
             }
         } catch (FileNotFoundException e) {
             System.out.println("Файл не найден: " + e.getMessage());
@@ -24,29 +23,28 @@ public class Main {
             System.out.println("Ошибка чтения из файла: " + e.getMessage());
         }
 
-        System.out.println("Список сторок, прочитанных из файла = " + fileLine);
+        System.out.println("Список строк, прочитанных из файла = " + fileLines);
 
-        ArrayList<Integer> arrayList1 = new ArrayList<>(Arrays.asList(489, 578, 999, 666, 777, 253, 7, 2));
+        ArrayList<Integer> integers1 = new ArrayList<>(Arrays.asList(489, 578, 999, 666, 4, 777, 253, 7, 2));
 
-        Iterator<Integer> iterator = arrayList1.iterator();
+        System.out.println("Список чисел до удаления четных = " + integers1);
 
-        System.out.println("Список чисел до удаления четных = " + arrayList1);
-
-        while (iterator.hasNext()) {
-            if (iterator.next() % 2 == 0) {
-                iterator.remove();
+        for (int i = 0; i < integers1.size(); ++i) {
+            if (integers1.get(i) % 2 == 0) {
+                integers1.remove(i);
+                i--;
             }
         }
 
-        System.out.println("Список без четных чисел = " + arrayList1);
+        System.out.println("Список без четных чисел = " + integers1);
 
-        ArrayList<Integer> arrayList2 = new ArrayList<>(Arrays.asList(1, 4, 489, 4, 1, 578, 999, 999, 666, 777, 2, 253, 7, 2));
+        ArrayList<Integer> integers2 = new ArrayList<>(Arrays.asList(1, 4, 489, 4, 1, 578, 999, 999, 666, 777, 2, 253, 7, 2));
 
-        System.out.println("Список чисел до удаления четных = " + arrayList2);
+        System.out.println("Список чисел до удаления четных = " + integers2);
 
-        ArrayList<Integer> uniqueNumbersList = new ArrayList<>();
+        ArrayList<Integer> uniqueNumbersList = new ArrayList<>(integers2.size());
 
-        for (int number : arrayList2) {
+        for (int number : integers2) {
             if (!uniqueNumbersList.contains(number)) {
                 uniqueNumbersList.add(number);
             }

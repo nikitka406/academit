@@ -44,7 +44,7 @@ public class Main {
 
         ArrayList<Integer> uniqueNumbersList = new ArrayList<>(integers2.size());
 
-        for (int number : integers2) {
+        for (Integer number : integers2) {
             if (!uniqueNumbersList.contains(number)) {
                 uniqueNumbersList.add(number);
             }

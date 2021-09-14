@@ -1,4 +1,4 @@
-package ru.academits.popov.hashTable;
+package ru.academits.popov.hash_table;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -6,7 +6,21 @@ import java.util.Collection;
 import java.util.Iterator;
 
 public class HashTable<T> implements Collection<T> {
-    private ArrayList<T>[] hashTable;
+    private final ArrayList<T>[] hashTable;
+
+    public HashTable() {
+        //noinspection unchecked
+        hashTable = (ArrayList<T>[]) new ArrayList[10];
+    }
+
+    public HashTable(int tableLength) {
+        if (tableLength <= 0) {
+            throw new IllegalArgumentException("Размер таблицы не может быть меньше или равен 0");
+        }
+
+        //noinspection unchecked
+        hashTable = (ArrayList<T>[]) new ArrayList[tableLength];
+    }
 
     @Override
     public int size() {
@@ -47,7 +61,7 @@ public class HashTable<T> implements Collection<T> {
         Object[] items = new Object[hashTable.length];
         int index = 0;
 
-        for (ArrayList<T> hashElement: hashTable){
+        for (ArrayList<T> hashElement : hashTable) {
             items[index] = hashElement;
             index++;
         }
@@ -57,12 +71,30 @@ public class HashTable<T> implements Collection<T> {
 
     @Override
     public <T1> T1[] toArray(T1[] a) {
-        return null;
+        if (a == null) {
+            throw new NullPointerException("Массив пуст.");
+        }
+
+        Object[] items = toArray();
+
+        if (a.length < hashTable.length) {
+            //noinspection unchecked
+            return (T1[]) Arrays.copyOf(items, hashTable.length, a.getClass());
+        }
+
+        //noinspection SuspiciousSystemArraycopy
+        System.arraycopy(items, 0, a, 0, hashTable.length);
+
+        if (a.length > hashTable.length) {
+            a[hashTable.length] = null;
+        }
+
+        return a;
     }
 
     @Override
     public boolean add(T t) {
-        int index = t.hashCode();
+        int index = getIndex(t);
 
         if (hashTable[index] == null) {
             hashTable[index] = new ArrayList<T>();
@@ -161,12 +193,10 @@ public class HashTable<T> implements Collection<T> {
 
         for (ArrayList<T> hashElement : hashTable) {
             stringBuilder.append(hashElement);
-
-            if (hashElement != hashTable[hashTable.length - 1]) {
-                stringBuilder.append("; ");
-            }
+            stringBuilder.append("; ");
         }
 
+        stringBuilder.deleteCharAt(stringBuilder.length() - 1);
         stringBuilder.append("]");
 
         return stringBuilder.toString();

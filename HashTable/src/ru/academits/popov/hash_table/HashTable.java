@@ -1,16 +1,15 @@
 package ru.academits.popov.hash_table;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Iterator;
+import java.util.*;
 
 public class HashTable<T> implements Collection<T> {
-    private final ArrayList<T>[] hashTable;
+    private final ArrayList<T>[] array;
+    private int size;
+    private int modCount;
 
     public HashTable() {
         //noinspection unchecked
-        hashTable = (ArrayList<T>[]) new ArrayList[10];
+        array = (ArrayList<T>[]) new ArrayList[10];
     }
 
     public HashTable(int tableLength) {
@@ -19,49 +18,45 @@ public class HashTable<T> implements Collection<T> {
         }
 
         //noinspection unchecked
-        hashTable = (ArrayList<T>[]) new ArrayList[tableLength];
+        array = (ArrayList<T>[]) new ArrayList[tableLength];
     }
 
     @Override
     public int size() {
-        return hashTable.length;
+        return size;
     }
 
     @Override
     public boolean isEmpty() {
-        return hashTable.length == 0;
+        return size == 0;
     }
 
     @Override
     public boolean contains(Object o) {
         int index = getIndex(o);
 
-        if (hashTable[index] != null) {
-            return hashTable[index].contains(o);
-        }
-
-        return false;
+        return array[index] != null && array[index].contains(o);
     }
 
-    public int getIndex(Object o) {
+    private int getIndex(Object o) {
         if (o == null) {
             return 0;
         }
 
-        return Math.abs(o.hashCode() % hashTable.length);
+        return Math.abs(o.hashCode() % array.length);
     }
 
     @Override
     public Iterator<T> iterator() {
-        return null;
+        return new MyIterator();
     }
 
     @Override
     public Object[] toArray() {
-        Object[] items = new Object[hashTable.length];
+        Object[] items = new Object[size];
         int index = 0;
 
-        for (ArrayList<T> hashElement : hashTable) {
+        for (T hashElement : this) {
             items[index] = hashElement;
             index++;
         }
@@ -77,16 +72,16 @@ public class HashTable<T> implements Collection<T> {
 
         Object[] items = toArray();
 
-        if (a.length < hashTable.length) {
+        if (a.length < size) {
             //noinspection unchecked
-            return (T1[]) Arrays.copyOf(items, hashTable.length, a.getClass());
+            return (T1[]) Arrays.copyOf(items, size, a.getClass());
         }
 
         //noinspection SuspiciousSystemArraycopy
-        System.arraycopy(items, 0, a, 0, hashTable.length);
+        System.arraycopy(items, 0, a, 0, size);
 
-        if (a.length > hashTable.length) {
-            a[hashTable.length] = null;
+        if (a.length > size) {
+            a[size] = null;
         }
 
         return a;
@@ -96,38 +91,38 @@ public class HashTable<T> implements Collection<T> {
     public boolean add(T t) {
         int index = getIndex(t);
 
-        if (hashTable[index] == null) {
-            hashTable[index] = new ArrayList<T>();
+        if (array[index] == null) {
+            array[index] = new ArrayList<>();
         }
 
-        hashTable[index].add(t);
+        array[index].add(t);
+        size++;
+        modCount++;
 
         return true;
     }
 
     @Override
     public boolean remove(Object o) {
-        if (!contains(o)) {
-            throw new IllegalArgumentException("Нет такого элемента в таблице, о = " + o);
-        }
-
         int index = getIndex(o);
-        hashTable[index].remove(o);
 
-        if (hashTable[index].size() == 0) {
-            hashTable[index] = null;
+        if (!array[index].remove(o)) {
+            return false;
         }
+
+        size--;
+        modCount++;
 
         return true;
     }
 
     @Override
-    public boolean containsAll(Collection<?> objects) {
-        if (objects == null) {
-            throw new IllegalArgumentException("Пустая коллекция");
+    public boolean containsAll(Collection<?> collection) {
+        if (collection == null) {
+            throw new NullPointerException("Коллекция = null");
         }
 
-        for (Object object : objects) {
+        for (Object object : collection) {
             if (!contains(object)) {
                 return false;
             }
@@ -137,12 +132,16 @@ public class HashTable<T> implements Collection<T> {
     }
 
     @Override
-    public boolean addAll(Collection<? extends T> objects) {
-        if (objects == null) {
-            throw new IllegalArgumentException("Нельзя добавить пустую коллекцию");
+    public boolean addAll(Collection<? extends T> collection) {
+        if (collection == null) {
+            throw new NullPointerException("Коллекция = null");
         }
 
-        for (T object : objects) {
+        if (collection.size() == 0) {
+            return false;
+        }
+
+        for (T object : collection) {
             add(object);
         }
 
@@ -150,48 +149,71 @@ public class HashTable<T> implements Collection<T> {
     }
 
     @Override
-    public boolean removeAll(Collection<?> objects) {
-        if (objects == null) {
-            throw new IllegalArgumentException("Нельзя удалить пустую коллекцию");
+    public boolean removeAll(Collection<?> collection) {
+        if (collection == null) {
+            throw new NullPointerException("Коллекция = null");
         }
 
-        for (Object object : objects) {
-            remove(object);
+        if (size == 0) {
+            return false;
         }
 
-        return true;
+        boolean isDeleted = false;
+
+        for (ArrayList<T> a : array) {
+            if (a != null) {
+                int initialSize = a.size();
+
+                if (a.removeAll(collection)) {
+                    size -= initialSize - a.size();
+                    modCount++;
+                    isDeleted = true;
+                }
+            }
+        }
+
+        return isDeleted;
     }
 
     @Override
     public boolean retainAll(Collection<?> collection) {
         if (collection == null) {
-            throw new IllegalArgumentException("Переданная коллекция пустая");
+            throw new NullPointerException("Коллекция = null");
         }
 
-        for (Object c : collection) {
-            int index = getIndex(c);
+        if (size == 0) {
+            return false;
+        }
 
-            if (!hashTable[index].contains(c)) {
-                hashTable[index] = null;
-            } else {
-                hashTable[index].removeAll(hashTable[index]);
-                hashTable[index].add((T) c);
+        boolean isDeleted = false;
+
+        for (Collection<T> c : array) {
+            if (c != null) {
+                int initialSize = c.size();
+
+                if (!c.retainAll(collection)) {
+                    size -= initialSize - c.size();
+                    modCount++;
+                    isDeleted = true;
+                }
+
+
             }
         }
 
-        return true;
+        return isDeleted;
     }
 
     @Override
     public void clear() {
-        Arrays.fill(hashTable, null);
+        Arrays.fill(array, null);
     }
 
     @Override
     public String toString() {
         StringBuilder stringBuilder = new StringBuilder("[");
 
-        for (ArrayList<T> hashElement : hashTable) {
+        for (ArrayList<T> hashElement : array) {
             stringBuilder.append(hashElement);
             stringBuilder.append("; ");
         }
@@ -200,5 +222,46 @@ public class HashTable<T> implements Collection<T> {
         stringBuilder.append("]");
 
         return stringBuilder.toString();
+    }
+
+    public class MyIterator implements Iterator<T> {
+        private int arrayIndex = 0;
+        private int index = -1;
+        private int hashIndex = -1;
+        private final int initialModCount = modCount;
+
+        @Override
+        public boolean hasNext() {
+            return index + 1 < size;
+        }
+
+        @Override
+        public T next() {
+            if (initialModCount != modCount) {
+                throw new ConcurrentModificationException("Список был изменен.");
+            }
+
+            if (!hasNext()) {
+                throw new NoSuchElementException("Список закончился, нет следующего элемента.");
+            }
+
+            while (hasNext()) {
+                if (array[arrayIndex] == null) {
+                    arrayIndex++;
+                } else {
+                    hashIndex++;
+
+                    if (hashIndex == array[arrayIndex].size()) {
+                        arrayIndex++;
+                        hashIndex = -1;
+                    } else {
+                        index++;
+                        return array[arrayIndex].get(hashIndex);
+                    }
+                }
+            }
+
+            return null;
+        }
     }
 }

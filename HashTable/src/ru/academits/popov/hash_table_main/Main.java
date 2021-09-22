@@ -18,7 +18,7 @@ public class Main {
 
         System.out.println("Моя вторая хэш таблица: " + myHashTable2);
 
-        myHashTable2.remove(212);
+        myHashTable2.remove(8765);
         System.out.println("Таблица с удаленым элементом: " + myHashTable2);
 
         myHashTable1.clear();

@@ -3,14 +3,14 @@ package ru.academits.popov.my_array_list;
 import java.util.*;
 
 public class MyArrayList<E> implements List<E> {
+    private static final int LENGTH = 10;
+
     private E[] items;
     private int size;
     private int modCount;
 
-    private static final int DEF_LENGTH = 10;
-
     public MyArrayList() {
-        this(DEF_LENGTH);
+        this(LENGTH);
     }
 
     public MyArrayList(int capacity) {
@@ -101,7 +101,7 @@ public class MyArrayList<E> implements List<E> {
 
     @Override
     public boolean addAll(int index, Collection<? extends E> collection) {
-        checkIndex(index, size);
+        checkIndex(index, size + 1);
         ensureCapacity(size + collection.size());
 
         System.arraycopy(items, index, items, index + collection.size(), size - index);
@@ -198,7 +198,7 @@ public class MyArrayList<E> implements List<E> {
     public E remove(int index) {
         checkIndex(index, size);
 
-        E removeItem = items[index];
+        E removedItem = items[index];
 
         System.arraycopy(items, index + 1, items, index, size - 1 - index);
 
@@ -206,7 +206,7 @@ public class MyArrayList<E> implements List<E> {
         size--;
         modCount++;
 
-        return removeItem;
+        return removedItem;
     }
 
     @Override
@@ -269,7 +269,7 @@ public class MyArrayList<E> implements List<E> {
 
         @Override
         public E next() {
-            if (initialModCount != MyArrayList.this.modCount) {
+            if (initialModCount != modCount) {
                 throw new ConcurrentModificationException("Список был изменен.");
             }
             if (!hasNext()) {
@@ -298,17 +298,16 @@ public class MyArrayList<E> implements List<E> {
             stringBuilder.append(", ");
         }
 
-        stringBuilder.deleteCharAt(stringBuilder.length() - 1);
-        stringBuilder.deleteCharAt(stringBuilder.length() - 1);
+        stringBuilder.delete(stringBuilder.length() - 2, stringBuilder.length());
         stringBuilder.append("]");
 
         return stringBuilder.toString();
     }
 
-    private void checkIndex(int index, int maxSize) {
-        if (index < 0 || index >= maxSize) {
+    static private void checkIndex(int index, int futureSize) {
+        if (index < 0 || index >= futureSize) {
             throw new IndexOutOfBoundsException("Индекс выходит за границы списка, index = " + index +
-                    ". Допустимый диапазон от 0 до " + (maxSize - 1));
+                    ". Допустимый диапазон от 0 до " + (futureSize - 1));
         }
     }
 }

@@ -3,19 +3,19 @@ package ru.academits.popov.my_array_list;
 import java.util.*;
 
 public class MyArrayList<E> implements List<E> {
-    private static final int LENGTH = 10;
+    private static final int DEFAULT_CAPACITY = 10;
 
     private E[] items;
     private int size;
     private int modCount;
 
     public MyArrayList() {
-        this(LENGTH);
+        this(DEFAULT_CAPACITY);
     }
 
     public MyArrayList(int capacity) {
         if (capacity < 0) {
-            throw new IllegalArgumentException("Размер списка не может быть меньше нуля, size = " + capacity);
+            throw new IllegalArgumentException("Вместимость списка не может быть меньше нуля, capacity = " + capacity);
         }
 
         //noinspection unchecked
@@ -281,7 +281,7 @@ public class MyArrayList<E> implements List<E> {
         }
     }
 
-    public void increaseCapacity() {
+    private void increaseCapacity() {
         items = Arrays.copyOf(items, items.length == 0 ? 1 : items.length * 2);
     }
 
@@ -304,7 +304,7 @@ public class MyArrayList<E> implements List<E> {
         return stringBuilder.toString();
     }
 
-    static private void checkIndex(int index, int futureSize) {
+    private static void checkIndex(int index, int futureSize) {
         if (index < 0 || index >= futureSize) {
             throw new IndexOutOfBoundsException("Индекс выходит за границы списка, index = " + index +
                     ". Допустимый диапазон от 0 до " + (futureSize - 1));

@@ -3,14 +3,15 @@ package ru.academits.popov.hash_table;
 import java.util.*;
 
 public class HashTable<T> implements Collection<T> {
-    static private final int SIZE = 10;
+    private static final int DEFAULT_ARRAY_SIZE = 10;
+
     private final ArrayList<T>[] array;
     private int size;
     private int modCount;
 
     public HashTable() {
         //noinspection unchecked
-        array = (ArrayList<T>[]) new ArrayList[SIZE];
+        array = (ArrayList<T>[]) new ArrayList[DEFAULT_ARRAY_SIZE];
     }
 
     public HashTable(int arrayLength) {
@@ -57,8 +58,8 @@ public class HashTable<T> implements Collection<T> {
         Object[] items = new Object[size];
         int i = 0;
 
-        for (T element : this) {
-            items[i] = element;
+        for (T item : this) {
+            items[i] = item;
             i++;
         }
 
@@ -68,7 +69,7 @@ public class HashTable<T> implements Collection<T> {
     @Override
     public <T1> T1[] toArray(T1[] a) {
         if (a == null) {
-            throw new NullPointerException("Коллекция отсутствует.");
+            throw new NullPointerException("Массив отсутствует.");
         }
 
         Object[] items = toArray();
@@ -89,14 +90,14 @@ public class HashTable<T> implements Collection<T> {
     }
 
     @Override
-    public boolean add(T element) {
-        int index = getIndex(element);
+    public boolean add(T item) {
+        int index = getIndex(item);
 
         if (array[index] == null) {
             array[index] = new ArrayList<>();
         }
 
-        array[index].add(element);
+        array[index].add(item);
         size++;
         modCount++;
 
@@ -106,19 +107,14 @@ public class HashTable<T> implements Collection<T> {
     @Override
     public boolean remove(Object o) {
         int index = getIndex(o);
+        boolean isRemoved = array[index].remove(o);
 
-        if (array[index].size() == 0) {
-            array[index] = null;
-        }
-
-        if (array[index] != null) {
+        if (isRemoved){
             size--;
             modCount++;
-
-            return array[index].remove(o);
         }
 
-        return false;
+        return isRemoved;
     }
 
     @Override
@@ -146,8 +142,8 @@ public class HashTable<T> implements Collection<T> {
             return false;
         }
 
-        for (T element : collection) {
-            add(element);
+        for (T item : collection) {
+            add(item);
         }
 
         return true;
@@ -159,11 +155,11 @@ public class HashTable<T> implements Collection<T> {
             throw new NullPointerException("Коллекция = null");
         }
 
-        if (size == 0) {
+        if (collection.size() == 0) {
             return false;
         }
 
-        boolean isDeleted = false;
+        boolean isRemoved = false;
 
         for (ArrayList<T> list : array) {
             if (list != null) {
@@ -171,16 +167,16 @@ public class HashTable<T> implements Collection<T> {
 
                 if (list.removeAll(collection)) {
                     size -= initialSize - list.size();
-                    isDeleted = true;
+                    isRemoved = true;
                 }
             }
         }
 
-        if (isDeleted) {
+        if (isRemoved) {
             modCount++;
         }
 
-        return isDeleted;
+        return isRemoved;
     }
 
     @Override
@@ -189,11 +185,11 @@ public class HashTable<T> implements Collection<T> {
             throw new NullPointerException("Коллекция = null");
         }
 
-        if (size == 0) {
+        if (collection.size() == 0) {
             return false;
         }
 
-        boolean isDeleted = false;
+        boolean isRemoved = false;
 
         for (ArrayList<T> list : array) {
             if (list != null) {
@@ -201,16 +197,16 @@ public class HashTable<T> implements Collection<T> {
 
                 if (!list.retainAll(collection)) {
                     size -= initialSize - list.size();
-                    isDeleted = true;
+                    isRemoved = true;
                 }
             }
         }
 
-        if (isDeleted) {
+        if (isRemoved) {
             modCount++;
         }
 
-        return isDeleted;
+        return isRemoved;
     }
 
     @Override
@@ -261,7 +257,7 @@ public class HashTable<T> implements Collection<T> {
                 throw new NoSuchElementException("Список закончился, нет следующего элемента.");
             }
 
-            while (hasNext()) {
+            while (true) {
                 if (array[arrayIndex] == null) {
                     arrayIndex++;
                 } else {
@@ -276,8 +272,6 @@ public class HashTable<T> implements Collection<T> {
                     }
                 }
             }
-
-            return null;
         }
     }
 }

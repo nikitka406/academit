@@ -107,14 +107,17 @@ public class HashTable<T> implements Collection<T> {
     @Override
     public boolean remove(Object o) {
         int index = getIndex(o);
-        boolean isRemoved = array[index].remove(o);
 
-        if (isRemoved){
-            size--;
-            modCount++;
+        if (array[index] != null){
+            if (array[index].remove(o)){
+                size--;
+                modCount++;
+
+                return true;
+            }
         }
 
-        return isRemoved;
+        return false;
     }
 
     @Override
@@ -181,32 +184,22 @@ public class HashTable<T> implements Collection<T> {
 
     @Override
     public boolean retainAll(Collection<?> collection) {
-        if (collection == null) {
-            throw new NullPointerException("Коллекция = null");
-        }
-
-        if (collection.size() == 0) {
-            return false;
-        }
-
-        boolean isRemoved = false;
+        int initialSize = size;
 
         for (ArrayList<T> list : array) {
             if (list != null) {
-                int initialSize = list.size();
-
-                if (!list.retainAll(collection)) {
-                    size -= initialSize - list.size();
-                    isRemoved = true;
-                }
+                size -= list.size();
+                list.retainAll(collection);
+                size += list.size();
             }
         }
 
-        if (isRemoved) {
+        if (initialSize != size) {
             modCount++;
+            return true;
         }
 
-        return isRemoved;
+        return false;
     }
 
     @Override

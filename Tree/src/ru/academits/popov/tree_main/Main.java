@@ -1,9 +1,6 @@
-package ru.academits.popov.main;
+package ru.academits.popov.tree_main;
 
 import ru.academits.popov.tree.Tree;
-import ru.academits.popov.tree.TreeNode;
-
-import java.util.function.Consumer;
 
 public class Main {
     public static void main(String[] args) {

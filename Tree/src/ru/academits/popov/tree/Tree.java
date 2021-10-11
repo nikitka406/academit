@@ -150,7 +150,7 @@ public class Tree<T> {
     }
 
     public void remove(T data) {
-        if (root == null){
+        if (root == null) {
             return;
         }
 
@@ -225,7 +225,7 @@ public class Tree<T> {
     }
 
     public void traverseWidth() {
-        if (root == null){
+        if (root == null) {
             return;
         }
 
@@ -250,8 +250,8 @@ public class Tree<T> {
         }
     }
 
-    public void traverseDepth(){
-        if (root == null){
+    public void traverseDepth() {
+        if (root == null) {
             return;
         }
 
@@ -259,15 +259,15 @@ public class Tree<T> {
         stack.add(root);
         System.out.println(root);
 
-        while (!stack.isEmpty()){
+        while (!stack.isEmpty()) {
             TreeNode<T> queuedNode = stack.removeLast();
 
-            if (queuedNode.getRight() != null){
+            if (queuedNode.getRight() != null) {
                 stack.addLast(queuedNode.getRight());
                 System.out.println(queuedNode.getRight());
             }
 
-            if (queuedNode.getLeft() != null){
+            if (queuedNode.getLeft() != null) {
                 stack.addLast(queuedNode.getLeft());
                 System.out.println(queuedNode.getLeft());
             }

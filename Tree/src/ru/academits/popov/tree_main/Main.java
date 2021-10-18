@@ -2,8 +2,11 @@ package ru.academits.popov.tree_main;
 
 import ru.academits.popov.tree.Tree;
 
+import java.util.function.Consumer;
+
 public class Main {
     public static void main(String[] args) {
+        Consumer<Integer> consumer = node -> System.out.println(node + " ");
         Tree<Integer> tree = new Tree<>(5);
         tree.insert(4);
         tree.insert(6);
@@ -17,15 +20,15 @@ public class Main {
 
         System.out.println("Дерево: " + tree);
         System.out.println("Обход в ширину:");
-        tree.traverseWidth();
+        tree.traverseWidth(consumer);
 
-        tree.remove(2);
-        tree.traverseWidth();
+        tree.remove(5);
+        tree.traverseWidth(consumer);
 
         System.out.println("Обход в глубину без рекурсии:");
-        tree.traverseDepth();
+        tree.traverseDepth(consumer);
 
         System.out.println("Обход в глубину с рекурсии:");
-        tree.traverseDepthRecursion();
+        tree.traverseDepthRecursion(consumer);
     }
 }

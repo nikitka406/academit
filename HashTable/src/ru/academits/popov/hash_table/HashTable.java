@@ -16,7 +16,7 @@ public class HashTable<T> implements Collection<T> {
 
     public HashTable(int arrayLength) {
         if (arrayLength <= 0) {
-            throw new IllegalArgumentException("Длина массива не может быть меньше или равен 0. arrayLength = " + arrayLength);
+            throw new IllegalArgumentException("Длина массива не может быть меньше или равна 0. arrayLength = " + arrayLength);
         }
 
         //noinspection unchecked
@@ -108,13 +108,11 @@ public class HashTable<T> implements Collection<T> {
     public boolean remove(Object o) {
         int index = getIndex(o);
 
-        if (array[index] != null){
-            if (array[index].remove(o)){
-                size--;
-                modCount++;
+        if (array[index] != null && array[index].remove(o)) {
+            size--;
+            modCount++;
 
-                return true;
-            }
+            return true;
         }
 
         return false;

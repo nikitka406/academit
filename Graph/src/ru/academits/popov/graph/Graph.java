@@ -4,6 +4,7 @@ package ru.academits.popov.graph;
 import java.util.Deque;
 import java.util.LinkedList;
 import java.util.Queue;
+import java.util.function.IntConsumer;
 
 public class Graph {
     private final int[][] matrix;
@@ -26,7 +27,7 @@ public class Graph {
         return matrix.length;
     }
 
-    public void traverseWidth() {
+    public void traverseWidth(IntConsumer consumer) {
         boolean[] visited = new boolean[matrix.length];
         Queue<Integer> queue = new LinkedList<>();
 
@@ -44,20 +45,19 @@ public class Graph {
                     continue;
                 }
 
+                consumer.accept(queuedIndex);
                 visited[queuedIndex] = true;
 
-                for (int j = queuedIndex + 1; j < matrix.length; j++) {
-                    if (matrix[queuedIndex][j] != 0) {
+                for (int j = 0; j < matrix.length; j++) {
+                    if (j != queuedIndex && matrix[queuedIndex][j] > 0) {
                         queue.add(j);
                     }
                 }
-
-                System.out.println(queuedIndex);
             }
         }
     }
 
-    public void traverseDepth() {
+    public void traverseDepth(IntConsumer consumer) {
         boolean[] visited = new boolean[matrix.length];
 
         Deque<Integer> stack = new LinkedList<>();
@@ -84,34 +84,28 @@ public class Graph {
                     }
                 }
 
-                System.out.println(queuedIndex);
+                consumer.accept(queuedIndex);
             }
         }
     }
 
-    public void traverseDepthRecursion(int index, boolean[] visited) {
-        if (visited[index]) {
-            return;
-        }
-
+    public void traverseDepthRecursion(int index, boolean[] visited, IntConsumer consumer) {
         visited[index] = true;
+        consumer.accept(index);
 
-        System.out.println(index);
-
-        for (int j = index + 1; j < matrix.length; ++j) {
-            if (matrix[index][j] != 0) {
-                traverseDepthRecursion(j, visited);
+        for (int i = 1; i < matrix[index].length; ++i) {
+            if (matrix[index][i] == 1 && !visited[i]) {
+                traverseDepthRecursion(i, visited, consumer);
             }
         }
     }
 
-    public void traverseDepthRecursion() {
+    public void traverseDepthRecursion(IntConsumer consumer) {
         boolean[] visited = new boolean[matrix.length];
-        traverseDepthRecursion(0, visited);
 
         for (int i = 0; i < matrix.length; ++i) {
             if (!visited[i]) {
-                traverseDepthRecursion(i, visited);
+                traverseDepthRecursion(i, visited, consumer);
             }
         }
     }

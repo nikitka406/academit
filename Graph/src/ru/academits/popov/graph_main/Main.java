@@ -2,8 +2,12 @@ package ru.academits.popov.graph_main;
 
 import ru.academits.popov.graph.Graph;
 
+import java.util.function.IntConsumer;
+
 public class Main {
     public static void main(String[] args) {
+        IntConsumer consumer = node -> System.out.println("Посещенный узел: " + node);
+
         int[] row1 = {0, 1, 1, 0, 1};
         int[] row2 = {1, 0, 0, 1, 1};
         int[] row3 = {1, 0, 0, 0, 1};
@@ -13,10 +17,10 @@ public class Main {
 
         Graph graph = new Graph(matrix);
         System.out.println("Обход графа в ширину: ");
-        graph.traverseWidth();
+        graph.traverseWidth(consumer);
         System.out.println("Обход графа в глубину: ");
-        graph.traverseDepth();
+        graph.traverseDepth(consumer);
         System.out.println("Обход графа в глубину с рекурсией: ");
-        graph.traverseDepthRecursion();
+        graph.traverseDepthRecursion(consumer);
     }
 }

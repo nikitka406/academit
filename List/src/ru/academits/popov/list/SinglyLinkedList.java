@@ -1,6 +1,7 @@
 package ru.academits.popov.list;
 
 import java.util.NoSuchElementException;
+import java.util.Objects;
 
 public class SinglyLinkedList<T> {
     private ListItem<T> head;
@@ -16,14 +17,13 @@ public class SinglyLinkedList<T> {
         }
     }
 
-    private void checkIndex(int index, int capacity) {
+    private void checkIndex(int index, int resultSize) {
         if (index < 0) {
             throw new IndexOutOfBoundsException("Индекс должен быть больше или равен нуля. Индекс = " + index);
         }
 
-        if (index >= capacity) {
-            throw new IndexOutOfBoundsException("Индекс = " + index +
-                    " должен быть строго меньше максимально допустимого значения = " + capacity);
+        if (index >= resultSize) {
+            throw new IndexOutOfBoundsException("Индекс = " + index + " больше либо равен " + resultSize);
         }
     }
 
@@ -35,6 +35,7 @@ public class SinglyLinkedList<T> {
 
     private ListItem<T> getItemByIndex(int index) {
         checkIndex(index, count);
+
         ListItem<T> item = head;
 
         for (int i = 0; i < index; ++i) {
@@ -110,13 +111,13 @@ public class SinglyLinkedList<T> {
             return false;
         }
 
-        if (head.getData().equals(data)) {
+        if (Objects.equals(head.getData(), data)) {
             deleteFirst();
             return true;
         }
 
         for (ListItem<T> item = head.getNext(), previousItem = head; item != null; previousItem = item, item = item.getNext()) {
-            if (item.getData().equals(data)) {
+            if (Objects.equals(item.getData(), data)) {
                 previousItem.setNext(item.getNext());
                 count--;
                 return true;

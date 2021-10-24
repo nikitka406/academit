@@ -12,7 +12,7 @@ public class KelvinScale implements Scale {
     }
 
     @Override
-    public String toString(){
+    public String toString() {
         return "Шкала Кельвина";
     }
 }

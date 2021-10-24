@@ -27,6 +27,7 @@ public class View {
         frame.setVisible(true);
         frame.setLocationRelativeTo(null);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setMinimumSize(new Dimension(450, 200));
     }
 
     private void eventHandling() {
@@ -35,10 +36,11 @@ public class View {
                 Scale inputScale = (Scale) inputScaleComboBox.getSelectedItem();
                 Scale outputScale = (Scale) outputScaleComboBox.getSelectedItem();
                 double inputTemperature = Double.parseDouble(inputTemperatureTextField.getText());
-                if (inputScale != null && outputScale != null){
-                    double outputTemperature = converter.getResultConvert(inputScale,outputScale,inputTemperature);
+
+                if (inputScale != null && outputScale != null) {
+                    double outputTemperature = converter.convertTemperature(inputScale, outputScale, inputTemperature);
                     outputTemperatureTextField.setText(String.valueOf(outputTemperature));
-                }else {
+                } else {
                     throw new IllegalArgumentException("Не выбрана шкала");
                 }
             } catch (NumberFormatException e) {
@@ -53,7 +55,7 @@ public class View {
         });
     }
 
-    private void createView() {
+    public void run() {
         SwingUtilities.invokeLater(() -> {
             createFrame("Перевод температуры", 500, 300);
 
@@ -109,14 +111,10 @@ public class View {
 
             c.gridx = 1;
             c.gridy = 6;
-            clearButton = new JButton("Попробовать еще раз.");
+            clearButton = new JButton("Очистить");
             panel.add(clearButton, c);
 
             eventHandling();
         });
-    }
-
-    public void run() {
-        createView();
     }
 }

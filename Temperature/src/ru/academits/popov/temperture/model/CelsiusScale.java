@@ -12,7 +12,7 @@ public class CelsiusScale implements Scale {
     }
 
     @Override
-    public String toString(){
+    public String toString() {
         return "Шкала Цельсия";
     }
 }
